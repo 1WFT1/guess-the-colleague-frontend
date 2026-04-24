@@ -135,18 +135,13 @@ watch([telegramReady, userId], async ([isReady, id]) => {
 const startGame = async () => {
   console.log('🎮 Starting game...');
   
-  // Добавьте эту функцию для получения данных пользователя
-  const getUserData = () => {
-    const params = new URLSearchParams(window.location.search);
-    return {
-      username: params.get('username') || '',
-      firstName: decodeURIComponent(params.get('firstName') || ''),
-      lastName: decodeURIComponent(params.get('lastName') || '')
-    };
-  };
+  // Получаем данные из URL
+  const params = new URLSearchParams(window.location.search);
+  const username = params.get('username') || '';
+  const firstName = decodeURIComponent(params.get('firstName') || '');
+  const lastName = decodeURIComponent(params.get('lastName') || '');
   
-  const userData = getUserData();
-  const fullName = `${userData.firstName} ${userData.lastName}`.trim() || userName.value || 'Игрок';
+  const fullName = `${firstName} ${lastName}`.trim() || userName.value || 'Игрок';
   localStorage.setItem('userName', fullName);
   
   // Проверяем, есть ли уже активная сессия
@@ -155,15 +150,14 @@ const startGame = async () => {
     await gameStore.updateGameMode(gameMode.value);
     await gameStore.loadNextQuestion();
   } else {
-    console.log('Creating new session with user data:', userData);
-    // ИЗМЕНЕНИЕ ЗДЕСЬ - передаем данные пользователя
+    console.log('Creating new session with user:', { firstName, lastName });
     await gameStore.initGame(
       userId.value, 
       userId.value, 
       gameMode.value,
-      userData.username,
-      userData.firstName,
-      userData.lastName
+      username,
+      firstName,
+      lastName
     );
   }
   
