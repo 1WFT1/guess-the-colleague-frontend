@@ -134,17 +134,37 @@ watch([telegramReady, userId], async ([isReady, id]) => {
 
 const startGame = async () => {
   console.log('🎮 Starting game...');
-  localStorage.setItem('userName', userName.value);
+  
+  // Добавьте эту функцию для получения данных пользователя
+  const getUserData = () => {
+    const params = new URLSearchParams(window.location.search);
+    return {
+      username: params.get('username') || '',
+      firstName: decodeURIComponent(params.get('firstName') || ''),
+      lastName: decodeURIComponent(params.get('lastName') || '')
+    };
+  };
+  
+  const userData = getUserData();
+  const fullName = `${userData.firstName} ${userData.lastName}`.trim() || userName.value || 'Игрок';
+  localStorage.setItem('userName', fullName);
   
   // Проверяем, есть ли уже активная сессия
   if (gameStore.sessionId) {
     console.log('Reusing existing session:', gameStore.sessionId);
-    // Обновляем режим в существующей сессии
     await gameStore.updateGameMode(gameMode.value);
     await gameStore.loadNextQuestion();
   } else {
-    console.log('Creating new session');
-    await gameStore.initGame(userId.value, userId.value, gameMode.value);
+    console.log('Creating new session with user data:', userData);
+    // ИЗМЕНЕНИЕ ЗДЕСЬ - передаем данные пользователя
+    await gameStore.initGame(
+      userId.value, 
+      userId.value, 
+      gameMode.value,
+      userData.username,
+      userData.firstName,
+      userData.lastName
+    );
   }
   
   gameKey.value++;
