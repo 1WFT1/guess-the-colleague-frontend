@@ -86,25 +86,40 @@ const loadStatsFromBackend = async (telegramUserId?: number) => {
   };
 
   // Public methods
-const initGame = async (telegramUserId: number, telegramChatId?: number, gameMode?: 'name' | 'department') => {
-  try {
-    isLoading.value = true;
-    error.value = null;
-    userId.value = telegramUserId;
-    
-    await loadStatsFromBackend(telegramUserId);
-    
-    const id = await gameApi.createSession(telegramUserId, telegramChatId || telegramUserId, gameMode);
-    sessionId.value = id;
-    
-    await loadNextQuestion();
-  } catch (err) {
-    error.value = 'Не удалось создать игровую сессию. Проверьте подключение к серверу.';
-    console.error('Init game error:', err);
-  } finally {
-    isLoading.value = false;
-  }
-};
+  const initGame = async (
+    telegramUserId: number, 
+    telegramChatId?: number, 
+    gameMode?: 'name' | 'department',
+    username?: string,
+    firstName?: string,
+    lastName?: string
+  ) => {
+    try {
+      isLoading.value = true;
+      error.value = null;
+      userId.value = telegramUserId;
+      
+      await loadStatsFromBackend(telegramUserId);
+      
+      // Передаем все параметры в createSession
+      const id = await gameApi.createSession(
+        telegramUserId, 
+        telegramChatId || telegramUserId, 
+        gameMode,
+        username,
+        firstName,
+        lastName
+      );
+      sessionId.value = id;
+      
+      await loadNextQuestion();
+    } catch (err) {
+      error.value = 'Не удалось создать игровую сессию. Проверьте подключение к серверу.';
+      console.error('Init game error:', err);
+    } finally {
+      isLoading.value = false;
+    }
+  };
 
 const updateGameMode = async (gameMode: 'name' | 'department') => {
   if (!sessionId.value) {
