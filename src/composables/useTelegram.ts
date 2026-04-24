@@ -30,19 +30,31 @@ export function useTelegram() {
    * Получение пользователя из URL параметров (для тестирования без Telegram)
    * Пример: ?userId=123&firstName=Роман&lastName=Хоменко
    */
-  const extractUserFromUrl = () => {
-    const params = new URLSearchParams(window.location.search);
-    const userId = params.get('userId');
-    if (userId) {
-      return {
-        id: parseInt(userId),
-        first_name: params.get('firstName') || 'User',
-        last_name: params.get('lastName') || '',
-        username: params.get('username') || ''
-      };
-    }
-    return null;
-  };
+const extractUserFromUrl = () => {
+  const params = new URLSearchParams(window.location.search);
+  const userId = params.get('userId');
+  
+  console.log('=== EXTRACTING FROM URL ===');
+  console.log('Raw firstName:', params.get('firstName'));
+  console.log('Raw lastName:', params.get('lastName'));
+  
+  if (userId) {
+    // Декодируем URL-encoded строки (русские буквы)
+    const firstName = decodeURIComponent(params.get('firstName') || 'User');
+    const lastName = decodeURIComponent(params.get('lastName') || '');
+    
+    console.log('Decoded firstName:', firstName);
+    console.log('Decoded lastName:', lastName);
+    
+    return {
+      id: parseInt(userId),
+      first_name: firstName,
+      last_name: lastName,
+      username: params.get('username') || ''
+    };
+  }
+  return null;
+};
 
   /**
    * Инициализация: определение пользователя
