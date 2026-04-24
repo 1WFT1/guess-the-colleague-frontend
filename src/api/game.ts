@@ -67,9 +67,16 @@ class GameApi {
   }
   
   /** Создать новую игровую сессию */
-  async createSession(userId: number, chatId?: number, gameMode?: 'name' | 'department'): Promise<string> {
+  async createSession(
+    userId: number, 
+    chatId?: number, 
+    gameMode?: 'name' | 'department',
+    username?: string,
+    firstName?: string,
+    lastName?: string
+  ): Promise<string> {
     const response = await this.api.post<string>(
-      `/game/session?userId=${userId}&chatId=${chatId || userId}&gameMode=${gameMode || 'name'}`
+      `/game/session?userId=${userId}&chatId=${chatId || userId}&gameMode=${gameMode || 'name'}&username=${username || ''}&firstName=${firstName || ''}&lastName=${lastName || ''}`
     );
     return response.data;
   }
