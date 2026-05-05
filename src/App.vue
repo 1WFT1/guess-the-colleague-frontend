@@ -22,7 +22,6 @@ onMounted(() => {
     // Сообщаем, что приложение готово
     tg.ready();
     
-    console.log('Telegram WebApp initialized');
   }
 });
 </script>

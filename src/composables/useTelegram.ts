@@ -34,17 +34,12 @@ const extractUserFromUrl = () => {
   const params = new URLSearchParams(window.location.search);
   const userId = params.get('userId');
   
-  console.log('=== EXTRACTING FROM URL ===');
-  console.log('Raw firstName:', params.get('firstName'));
-  console.log('Raw lastName:', params.get('lastName'));
   
   if (userId) {
     // Декодируем URL-encoded строки (русские буквы)
     const firstName = decodeURIComponent(params.get('firstName') || 'User');
     const lastName = decodeURIComponent(params.get('lastName') || '');
     
-    console.log('Decoded firstName:', firstName);
-    console.log('Decoded lastName:', lastName);
     
     return {
       id: parseInt(userId),
@@ -61,9 +56,6 @@ const extractUserFromUrl = () => {
    * Сначала пытаемся получить из Telegram API, затем из URL
    */
   const init = async () => {
-    console.log('Attempting to detect user...');
-    console.log('Current URL:', window.location.href);
-    console.log('Search params:', window.location.search);
     
     // Ждем инициализацию Telegram WebApp
     await new Promise(resolve => setTimeout(resolve, 100));
@@ -77,7 +69,6 @@ const extractUserFromUrl = () => {
       // Список ID администраторов (можно вынести в конфиг)
       const adminIds = [123456789, 1003235952];
       isAdmin.value = adminIds.includes(tgUser.id);
-      console.log('✅ User detected:', { id: tgUser.id, name: tgUser.first_name });
     } else {
       // Fallback для разработки без Telegram
       console.warn('❌ No user detected, using fallback');

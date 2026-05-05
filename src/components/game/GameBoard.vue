@@ -162,7 +162,6 @@ const setGameMode = async (mode: 'name' | 'department') => {
   // Обновляем режим на бэкенде
   try {
     await gameStore.updateGameMode(mode);
-    console.log('Game mode updated to:', mode);
   } catch (err) {
     console.error('Failed to update game mode:', err);
   }
@@ -233,13 +232,11 @@ const getOptionLetter = (index: number): string => {
 const handleAnswer = async (index: number) => {
   // Блокируем повторные ответы
   if (isAnswerDisabled.value || !gameStore.currentQuestion || isAnswerSubmitted.value) {
-    console.log('Answer already submitted or disabled');
     return;
   }
   
   isAnswerSubmitted.value = true;
   
-  console.log('Submitting answer for question:', gameStore.currentQuestion.questionId);
   
   await gameStore.submitAnswer(index);
 

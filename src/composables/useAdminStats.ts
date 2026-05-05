@@ -136,7 +136,6 @@ export function useAdminStats() {
         topPlayer: getTopPlayer(users)
       };
       
-      console.log('Stats updated from backend:', stats.value);
     } catch (err) {
       console.error('Error updating stats:', err);
       error.value = 'Ошибка загрузки статистики';

@@ -131,7 +131,6 @@ const loadLeaderboard = async () => {
       rank: idx + 1
     }));
     
-    console.log('Leaderboard loaded:', allUsers.value);
   } catch (err) {
     console.error('Failed to load leaderboard:', err);
   } finally {

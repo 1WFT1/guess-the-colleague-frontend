@@ -133,7 +133,6 @@ watch([telegramReady, userId], async ([isReady, id]) => {
 });
 
 const startGame = async () => {
-  console.log('🎮 Starting game...');
   
   // Получаем данные из URL
   const params = new URLSearchParams(window.location.search);
@@ -146,11 +145,9 @@ const startGame = async () => {
   
   // Проверяем, есть ли уже активная сессия
   if (gameStore.sessionId) {
-    console.log('Reusing existing session:', gameStore.sessionId);
     await gameStore.updateGameMode(gameMode.value);
     await gameStore.loadNextQuestion();
   } else {
-    console.log('Creating new session with user:', { firstName, lastName });
     await gameStore.initGame(
       userId.value, 
       userId.value, 
@@ -166,7 +163,6 @@ const startGame = async () => {
 };
 
 const handleBackToMenu = async () => {
-  console.log('🔙 Back to menu from game');
   currentView.value = 'menu';
   // НЕ вызываем resetGame() и не удаляем sessionId
   await loadUserStats();
@@ -206,11 +202,6 @@ const handleImageError = (event: Event) => {
 };
 
 onMounted(() => {
-  console.log('GameView mounted');
-  console.log('User ID:', userId.value);
-  console.log('Is Admin:', isAdmin.value);
-  console.log('User Name:', userName.value);
-  console.log('Telegram ready:', telegramReady.value);
   
   chatId.value = userId.value;
   

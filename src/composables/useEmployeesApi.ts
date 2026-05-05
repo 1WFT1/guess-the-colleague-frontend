@@ -26,9 +26,7 @@ export function useEmployeesApi() {
   const create = async (data: any): Promise<Employee | null> => {
     isLoading.value = true;
     try {
-      console.log('📤 useEmployeesApi.create received:', data);
       const result = await gameApi.createEmployee(data);
-      console.log('✅ useEmployeesApi.create success:', result);
       return result;
     } catch (err: any) {
       console.error('❌ useEmployeesApi.create error:', err);
